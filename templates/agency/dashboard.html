@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}Agency Dashboard - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Welcome, {{ current_user.username }}</h1>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Pending Reviews</h3>
+                </div>
+                <div class="card-body">
+                    <p>Documents waiting for your review.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('agency.review_applications', status='pending') }}" class="btn btn-primary">View Pending</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Actions</h3>
+                </div>
+                <div class="card-body">
+                    <p>Track your recent document reviews.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#recent-actions" class="btn btn-primary">View History</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Statistics</h3>
+                </div>
+                <div class="card-body">
+                    <p>View your review performance metrics.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="#statistics" class="btn btn-primary">View Stats</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Documents for Review</h3>
+                </div>
+                <div class="card-body">
+                    {% if documents %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Document Type</th>
+                                        <th>User</th>
+                                        <th>Aadhaar</th>
+                                        <th>Status</th>
+                                        <th>Uploaded</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for document in documents %}
+                                        <tr>
+                                            <td>{{ document.doc_type }}</td>
+                                            <td>{{ document.user.name }}</td>
+                                            <td>{{ document.user.aadhaar_number }}</td>
+                                            <td>
+                                                {% if document.status == 'pending' %}
+                                                    <span class="badge bg-warning">Pending</span>
+                                                {% elif document.status == 'under_review' %}
+                                                    <span class="badge bg-info">Under Review</span>
+                                                {% elif document.status == 'approved' %}
+                                                    <span class="badge bg-success">Approved</span>
+                                                {% elif document.status == 'rejected' %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ document.status | title }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ document.uploaded_at.strftime('%d %b %Y') }}</td>
+                                            <td>
+                                                <form method="POST" action="{{ url_for('update_status', document_id=document.id) }}" class="d-inline">
+                                                    <select name="status" class="form-select form-select-sm d-inline-block w-auto me-2">
+                                                        <option value="approved">Approve</option>
+                                                        <option value="rejected">Reject</option>
+                                                        <option value="pending_verification">Pending Verification</option>
+                                                    </select>
+                                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-center">No documents waiting for review.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

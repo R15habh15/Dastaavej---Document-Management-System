@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% block title %}Passport Application - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Passport Application</h1>
+        <a href="{{ url_for('citizen.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Personal Information</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('citizen.passport_application') }}">
+                        {{ form.csrf_token }}
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">{{ form.full_name.label }}</label>
+                                {{ form.full_name(class="form-control" + (" is-invalid" if form.full_name.errors else "")) }}
+                                {% if form.full_name.errors %}
+                                    {% for error in form.full_name.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.date_of_birth.label }}</label>
+                                {{ form.date_of_birth(class="form-control" + (" is-invalid" if form.date_of_birth.errors else ""), type="date") }}
+                                {% if form.date_of_birth.errors %}
+                                    {% for error in form.date_of_birth.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.gender.label }}</label>
+                                {{ form.gender(class="form-select" + (" is-invalid" if form.gender.errors else "")) }}
+                                {% if form.gender.errors %}
+                                    {% for error in form.gender.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Replace the old address field with permanent address section -->
+                        <div class="mb-3">
+                            <h4>Permanent Address</h4>
+                            <label class="form-label">{{ form.permanent_address.label }}</label>
+                            {{ form.permanent_address(class="form-control" + (" is-invalid" if form.permanent_address.errors else ""), rows=3) }}
+                            {% if form.permanent_address.errors %}
+                                {% for error in form.permanent_address.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.permanent_state.label }}</label>
+                                {{ form.permanent_state(class="form-control" + (" is-invalid" if form.permanent_state.errors else "")) }}
+                                {% if form.permanent_state.errors %}
+                                    {% for error in form.permanent_state.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.permanent_pincode.label }}</label>
+                                {{ form.permanent_pincode(class="form-control" + (" is-invalid" if form.permanent_pincode.errors else "")) }}
+                                {% if form.permanent_pincode.errors %}
+                                    {% for error in form.permanent_pincode.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.permanent_country.label }}</label>
+                                {{ form.permanent_country(class="form-select" + (" is-invalid" if form.permanent_country.errors else "")) }}
+                                {% if form.permanent_country.errors %}
+                                    {% for error in form.permanent_country.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Add the checkbox for same as permanent address -->
+                        <div class="mb-3 form-check">
+                            {{ form.same_as_permanent(class="form-check-input") }}
+                            <label class="form-check-label" for="same_as_permanent">{{ form.same_as_permanent.label }}</label>
+                        </div>
+                        
+                        <!-- Add current address section -->
+                        <div class="mb-3">
+                            <h4>Current Address</h4>
+                            <label class="form-label">{{ form.current_address.label }}</label>
+                            {{ form.current_address(class="form-control" + (" is-invalid" if form.current_address.errors else ""), rows=3) }}
+                            {% if form.current_address.errors %}
+                                {% for error in form.current_address.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.current_state.label }}</label>
+                                {{ form.current_state(class="form-control" + (" is-invalid" if form.current_state.errors else "")) }}
+                                {% if form.current_state.errors %}
+                                    {% for error in form.current_state.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.current_pincode.label }}</label>
+                                {{ form.current_pincode(class="form-control" + (" is-invalid" if form.current_pincode.errors else "")) }}
+                                {% if form.current_pincode.errors %}
+                                    {% for error in form.current_pincode.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">{{ form.current_country.label }}</label>
+                                {{ form.current_country(class="form-select" + (" is-invalid" if form.current_country.errors else "")) }}
+                                {% if form.current_country.errors %}
+                                    {% for error in form.current_country.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.phone.label }}</label>
+                                {{ form.phone(class="form-control" + (" is-invalid" if form.phone.errors else "")) }}
+                                {% if form.phone.errors %}
+                                    {% for error in form.phone.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.email.label }}</label>
+                                {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                                {% if form.email.errors %}
+                                    {% for error in form.email.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <h4 class="mt-4 mb-3">Emergency Contact</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.next_of_kin.label }}</label>
+                                {{ form.next_of_kin(class="form-control" + (" is-invalid" if form.next_of_kin.errors else "")) }}
+                                {% if form.next_of_kin.errors %}
+                                    {% for error in form.next_of_kin.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">{{ form.next_of_kin_relation.label }}</label>
+                                {{ form.next_of_kin_relation(class="form-select" + (" is-invalid" if form.next_of_kin_relation.errors else "")) }}
+                                {% if form.next_of_kin_relation.errors %}
+                                    {% for error in form.next_of_kin_relation.errors %}
+                                        <div class="invalid-feedback">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.next_of_kin_phone.label }}</label>
+                            {{ form.next_of_kin_phone(class="form-control" + (" is-invalid" if form.next_of_kin_phone.errors else "")) }}
+                            {% if form.next_of_kin_phone.errors %}
+                                {% for error in form.next_of_kin_phone.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            {% endif %}
+                            <small class="text-muted">Must be 10 digits and different from your phone number</small>
+                        </div>
+                        
+                        <div class="mt-4">
+                            {{ form.submit(class="btn btn-primary w-100") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sameAsCheckbox = document.getElementById('same_as_permanent');
+    
+    // Add input validation for pincode fields
+    const pincodeFields = document.querySelectorAll('input[id$="pincode"]');
+    pincodeFields.forEach(field => {
+        field.addEventListener('input', function() {
+            // Remove non-digit characters
+            this.value = this.value.replace(/\D/g, '');
+            
+            // Limit to 6 digits
+            if (this.value.length > 6) {
+                this.value = this.value.slice(0, 6);
+            }
+        });
+    });
+    
+    // Add input validation for state fields
+    const stateFields = document.querySelectorAll('input[id$="state"]');
+    stateFields.forEach(field => {
+        field.addEventListener('input', function() {
+            // Remove non-letter characters except spaces
+            this.value = this.value.replace(/[^A-Za-z\s]/g, '');
+        });
+    });
+    
+    if (sameAsCheckbox) {
+        sameAsCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                // Copy permanent address fields to current address fields
+                document.getElementById('current_address').value = document.getElementById('permanent_address').value;
+                document.getElementById('current_state').value = document.getElementById('permanent_state').value;
+                document.getElementById('current_pincode').value = document.getElementById('permanent_pincode').value;
+                
+                // Set the select dropdown for country
+                const permanentCountry = document.getElementById('permanent_country');
+                const currentCountry = document.getElementById('current_country');
+                currentCountry.value = permanentCountry.value;
+                
+                // Instead of disabling, make them readonly
+                document.getElementById('current_address').readOnly = true;
+                document.getElementById('current_state').readOnly = true;
+                document.getElementById('current_pincode').readOnly = true;
+                document.getElementById('current_country').disabled = true;
+            } else {
+                // Enable current address fields
+                document.getElementById('current_address').readOnly = false;
+                document.getElementById('current_state').readOnly = false;
+                document.getElementById('current_pincode').readOnly = false;
+                document.getElementById('current_country').disabled = false;
+            }
+        });
+        
+        // Trigger the change event if the checkbox is already checked (e.g., on form reload)
+        if (sameAsCheckbox.checked) {
+            sameAsCheckbox.dispatchEvent(new Event('change'));
+        }
+    }
+});
+</script>
+{% endblock %}

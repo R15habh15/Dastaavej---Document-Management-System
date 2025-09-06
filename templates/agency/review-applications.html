@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Review Applications - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Review Applications</h1>
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link {% if current_status == 'pending' %}active{% endif %}" href="{{ url_for('agency.review_applications', status='pending') }}">Pending</a></li>
+        <li class="nav-item"><a class="nav-link {% if current_status == 'under review' %}active{% endif %}" href="{{ url_for('agency.review_applications', status='under review') }}">Under Review</a></li>
+        <li class="nav-item"><a class="nav-link {% if current_status == 'approved' %}active{% endif %}" href="{{ url_for('agency.review_applications', status='approved') }}">Approved</a></li>
+        <li class="nav-item"><a class="nav-link {% if current_status == 'rejected' %}active{% endif %}" href="{{ url_for('agency.review_applications', status='rejected') }}">Rejected</a></li>
+    </ul>
+
+    <div class="mt-4">
+        {% if applications %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Application ID</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Submitted On</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in applications %}
+                    <tr>
+                        <td>{{ application.application_number }}</td>
+                        <td>{{ application.name }}</td>
+                        <td>{{ application.status }}</td>
+                        <td>{{ application.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if application.status not in ['approved', 'rejected'] %}
+                                <a href="{{ url_for('agency.update_status', application_id=application.id) }}" class="btn btn-primary btn-sm">Update Status</a>
+                            {% else %}
+                                <span class="badge bg-secondary">Finalized</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-muted">No applications found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

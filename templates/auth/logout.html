@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Logout - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Logout Confirmation</h2>
+                </div>
+                <div class="card-body text-center">
+                    <p>Are you sure you want to log out of your account?</p>
+                    
+                    <a href="{{ url_for('auth.logout', confirm=1) }}" class="btn btn-primary">Yes, Log Me Out</a>
+                    
+                    {% if current_user.role == 'citizen' %}
+                        <a href="{{ url_for('citizen.dashboard') }}" class="btn btn-secondary">No, Return to Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('agency.dashboard') }}" class="btn btn-secondary">No, Return to Dashboard</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

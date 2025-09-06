@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Dastaavej - Document Tracking System" />
+        <meta name="author" content="" />
+        <title>Dastaavej - Document Tracking System</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="index.html">Dastaavej</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownApply" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Apply</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownApply">
+                                <li><a class="dropdown-item" href="passport_apply.html">Passport</a></li>
+                                <li><a class="dropdown-item" href="pancard_apply.html">Pancard</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdownTrack Status" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">TrackStatus</a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownTrackStatus">
+                                <li><a class="dropdown-item" href="portfolio-overview.html">Passport</a></li>
+                                <li><a class="dropdown-item" href="portfolio-item.html">Pancard</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    </div>
+                </div>
+            </nav>
+<head>
+    <title>Apply for PAN Card - My Application</title>
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .flash {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h2>Apply for PAN Card</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="flash {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="form-group">
+            <label for="full_name">Full Name:</label>
+            <input type="text" name="full_name" id="full_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" name="date_of_birth" id="date_of_birth" required>
+        </div>
+
+        <div class="form-group">
+            <label for="father_name">Father's Name:</label>
+            <input type="text" name="father_name" id="father_name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <textarea name="address" id="address" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="text" name="phone" id="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Passport Size Photo:</label>
+            <input type="file" name="photo" id="photo" required>
+        </div>
+
+        <div class="form-group">
+            <label for="id_proof">ID Proof:</label>
+            <input type="file" name="id_proof" id="id_proof" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address_proof">Address Proof:</label>
+            <input type="file" name="address_proof" id="address_proof" required>
+        </div>
+
+        <button type="submit">Submit PAN Card Application</button>
+    </form>
+</body>
+</html>

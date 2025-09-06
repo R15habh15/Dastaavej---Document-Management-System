@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}About Dastaavej - Document Tracking System{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="mb-4">About Dastaavej</h1>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>Our Mission</h2>
+                    <p>Dastaavej was created with a simple mission: to make document tracking accessible, transparent, and efficient for every citizen. We understand the challenges people face when dealing with important documents like Passport and PAN Card, and we're here to simplify that process.</p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>What We Do</h2>
+                    <p>Dastaavej provides a centralized platform for tracking your Passport and PAN Card applications. Our system allows you to:</p>
+                    <ul>
+                        <li>Apply for new documents online</li>
+                        <li>Track the status of your applications in real-time</li>
+                        <li>Receive notifications at every stage of the process</li>
+                        <li>Get support from our dedicated team when you need it</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ✅ Improved Privacy Policy (Bootstrap Accordion) -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>Privacy Policy</h2>
+                    <div class="accordion" id="privacyAccordion">
+                        {% set privacy_questions = [
+                            ('What information do we collect?', 'We collect personal details such as name, email, phone number, and address when you register. Additionally, we track application progress for better service.'),
+                            ('How do we use your information?', 'Your information is used for application processing, updates, and customer support. We do not share your data with unauthorized third parties.'),
+                            ('How is my data protected?', 'We use encryption and secure storage systems to protect your data from unauthorized access or modifications.'),
+                            ('Do we use cookies?', 'Yes, we use cookies to enhance user experience. You can disable them in your browser settings.'),
+                            ('How can I delete my account?', 'You can request account deletion via account settings or by contacting support.')
+                        ] %}
+                        
+                        {% for idx, (question, answer) in enumerate(privacy_questions) %}
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button {% if idx != 0 %}collapsed{% endif %}" data-bs-toggle="collapse" data-bs-target="#privacy{{ idx }}">
+                                    {{ question }}
+                                </button>
+                            </h3>
+                            <div id="privacy{{ idx }}" class="accordion-collapse collapse {% if idx == 0 %}show{% endif %}" data-bs-parent="#privacyAccordion">
+                                <div class="accordion-body">
+                                    {{ answer }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ✅ Improved FAQ Section (Bootstrap Accordion) -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>Frequently Asked Questions</h2>
+                    <div class="accordion" id="faqAccordion">
+                        {% set faqs = [
+                            ('How do I track my application?', 'Once you register and submit your application, you can track its status from your dashboard. Simply log in and visit the "Application Status" page.'),
+                            ('What documents do I need to apply?', 'For a Passport, you need proof of identity, proof of address, and a passport-sized photograph. For a PAN Card, you need additional proof of date of birth.'),
+                            ('How long does the process take?', 'The processing time varies. Typically, it takes 15-30 days for a Passport and 7-15 days for a PAN Card from the application date.'),
+                            ('Is my information secure?', 'Yes, all data is encrypted and securely stored. We comply with all data protection regulations.')
+                        ] %}
+                        
+                        {% for idx, (question, answer) in enumerate(faqs) %}
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button {% if idx != 0 %}collapsed{% endif %}" data-bs-toggle="collapse" data-bs-target="#faq{{ idx }}">
+                                    {{ question }}
+                                </button>
+                            </h3>
+                            <div id="faq{{ idx }}" class="accordion-collapse collapse {% if idx == 0 %}show{% endif %}" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    {{ answer }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2>Our Team</h2>
+                    <p>Dastaavej is powered by a team of dedicated professionals who are committed to making document tracking simple and hassle-free. Our team includes:</p>
+                    <ul>
+                        <li>Technology experts who ensure our platform is secure and user-friendly</li>
+                        <li>Customer support specialists who are available to assist you</li>
+                        <li>Documentation experts who understand the intricacies of the process</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h2>Contact Us</h2>
+                    <p>Have questions or need assistance? Feel free to <a href="{{ url_for('main.contact') }}">contact us</a>. Our support team is available 24/7 to help you with any queries you may have.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

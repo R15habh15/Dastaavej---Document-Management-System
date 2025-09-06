@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Agency Settings - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Agency Settings</h1>
+    
+    <form method="POST">
+        {{ form.hidden_tag() }}  {# CSRF Protection #}
+
+        <div class="mb-3">
+            <label for="agency_name" class="form-label">Agency Name</label>
+            {{ form.agency_name(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="contact_email" class="form-label">Contact Email</label>
+            {{ form.contact_email(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            <label for="notifications" class="form-label">Enable Notifications</label>
+            {{ form.notifications(class="form-check-input") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+    </form>
+</div>
+{% endblock %}

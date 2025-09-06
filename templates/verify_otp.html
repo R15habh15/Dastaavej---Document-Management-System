@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify OTP - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Verify Your Email</h2>
+                </div>
+                <div class="card-body">
+                    <p class="text-center mb-4">We've sent a 6-digit OTP to your email address. Please enter it below to complete your registration.</p>
+                    
+                    <form method="POST">
+                        {{ form.csrf_token }}
+                        <div class="mb-3">
+                            <label for="otp" class="form-label">OTP Code</label>
+                            {{ form.otp(class="form-control", placeholder="Enter 6-digit OTP") }}
+                            {% for error in form.otp.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="d-grid">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p>Didn't receive the code? <a href="{{ url_for('auth.resend_otp') }}">Resend OTP</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

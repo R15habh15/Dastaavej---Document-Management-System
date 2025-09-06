@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Application Status - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Update Application Status</h1>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h4>Application ID: {{ application.application_number }}</h4>
+            <p><strong>Name:</strong> {{ application.name }}</p>
+            <p><strong>Current Status:</strong> {{ application.status }}</p>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}  {# CSRF Protection #}
+                
+                <div class="mb-3">
+                    <label for="status" class="form-label">Change Status:</label>
+                    {{ form.status(class="form-select") }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Add Comment:</label>
+                    {{ form.comment(class="form-control", rows=3) }}
+                </div>
+
+                <button type="submit" class="btn btn-success">Update Status</button>
+                <a href="{{ url_for('agency.review_applications', status=application.status) }}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Document Preview Section -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>Application Documents</h3>
+        </div>
+        <div class="card-body">
+            <!-- Application Form Preview -->
+            <div class="mb-4">
+                <h4>Application Form</h4>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('agency.view_application_form', application_id=application.id) }}" 
+                       class="btn btn-primary" target="_blank">
+                        <i class="fas fa-eye"></i> View Application Form
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Other Documents -->
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Document Type</th>
+                            <th>Uploaded At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for document in application.documents %}
+                        {% if document.document_type != 'application_form' %}
+                        <tr>
+                            <td>
+                                {% if document.document_type == 'id_proof' %}
+                                    ID Proof
+                                {% elif document.document_type == 'photo' %}
+                                    Photo
+                                {% elif document.document_type == 'address_proof' %}
+                                    Address Proof
+                                {% elif document.document_type == 'dob_proof' %}
+                                    Date of Birth Proof
+                                {% elif document.document_type == 'signature' %}
+                                    Signature
+                                {% else %}
+                                    {{ document.document_type | title }}
+                                {% endif %}
+                            </td>
+                            <td>{{ document.uploaded_at.strftime('%d-%m-%Y %H:%M') }}</td>
+                            <td>
+                                <a href="{{ url_for('agency.view_document', document_id=document.id) }}" class="btn btn-sm btn-primary" target="_blank">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Status History</h3>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                {% for update in status_updates %}
+                <li class="list-group-item">
+                    <strong>{{ update.status }}</strong> - {{ update.comment if update.comment else "No comments" }}
+                    <span class="text-muted float-end">{{ update.updated_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

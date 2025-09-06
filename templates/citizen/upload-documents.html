@@ -1,0 +1,261 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Documents - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Upload Documents</h1>
+        <a href="{{ url_for('citizen.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Document Upload Form</h3>
+                </div>
+                <div class="card-body">
+                    <div id="errorDisplay" class="alert alert-danger mb-3" style="display: none;"></div>
+                    
+                    <form id="uploadForm" method="POST" action="{{ url_for('citizen.upload_documents') }}" enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">{{ form.document_type.label }}</label>
+                            {{ form.document_type(class="form-select") }}
+                            {% for error in form.document_type.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        
+                        <div id="passport-fields">
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.id_proof.label }}</label>
+                                {{ form.id_proof(class="form-control", accept=".pdf,.jpg,.jpeg") }}
+                                {% for error in form.id_proof.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: PDF, JPG, JPEG (Max size: 3MB)</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.dob_proof.label }}</label>
+                                {{ form.dob_proof(class="form-control", accept=".pdf,.jpg,.jpeg") }}
+                                {% for error in form.dob_proof.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: PDF, JPG, JPEG (Max size: 3MB)</small>
+                            </div>
+                        </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.photo.label }}</label>
+                                {{ form.photo(class="form-control", accept=".jpg,.jpeg,.png") }}
+                                {% for error in form.photo.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: JPG, JPEG, PNG (Max size: 3MB)</small>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.address_proof.label }}</label>
+                                {{ form.address_proof(class="form-control", accept=".pdf,.jpg,.jpeg") }}
+                                {% for error in form.address_proof.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: PDF, JPG, JPEG (Max size: 3MB)</small>
+                            </div>
+                        </div>
+                        
+                        <div id="pancard-fields" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.pan_id_proof.label }}</label>
+                                {{ form.pan_id_proof(class="form-control", accept=".pdf,.jpg,.jpeg") }}
+                                {% for error in form.pan_id_proof.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: PDF, JPG, JPEG (Max size: 3MB)</small>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.pan_photo.label }}</label>
+                                {{ form.pan_photo(class="form-control", accept=".jpg,.jpeg,.png") }}
+                                {% for error in form.pan_photo.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: JPG, JPEG, PNG (Max size: 3MB)</small>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.pan_address_proof.label }}</label>
+                                {{ form.pan_address_proof(class="form-control", accept=".pdf,.jpg,.jpeg") }}
+                                {% for error in form.pan_address_proof.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: PDF, JPG, JPEG (Max size: 3MB)</small>
+                            </div>
+                        
+                            <div class="mb-3">
+                                <label class="form-label">{{ form.pan_signature.label }}</label>
+                                {{ form.pan_signature(class="form-control", accept=".jpg,.jpeg,.png") }}
+                                {% for error in form.pan_signature.errors %}
+                                    <p class="text-danger">{{ error }}</p>
+                                {% endfor %}
+                                <small class="text-muted">Accepted formats: JPG, JPEG, PNG (Max size: 3MB)</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Add this to your scripts block -->
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const documentType = document.getElementById('document_type');
+                            const passportFields = document.getElementById('passport-fields');
+                            const pancardFields = document.getElementById('pancard-fields');
+                        
+                            function toggleFields() {
+                                if (documentType.value === 'passport') {
+                                    passportFields.style.display = 'block';
+                                    pancardFields.style.display = 'none';
+                                } else if (documentType.value === 'pancard') {
+                                    passportFields.style.display = 'none';
+                                    pancardFields.style.display = 'block';
+                                }
+                            }
+                        
+                            documentType.addEventListener('change', toggleFields);
+                            toggleFields(); // Initial toggle
+                        });
+                        </script>
+                        
+                        {{ form.submit(class="btn btn-primary w-100", id="submitButton") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('uploadForm');
+    const errorDisplay = document.getElementById('errorDisplay');
+    const submitButton = document.getElementById('submitButton');
+    
+    if (!submitButton) {
+        console.error('Submit button not found');
+        return;
+    }
+
+    const fileInputs = document.getElementById('passport-fields').style.display === 'none' 
+        ? ['pan_id_proof', 'pan_photo', 'pan_address_proof', 'pan_signature'].map(id => form[id])
+        : ['id_proof', 'photo', 'address_proof', 'dob_proof'].map(id => form[id]);
+    
+    function validateFile(file, inputName) {
+        const maxSize = 3 * 1024 * 1024; // 3MB in bytes
+        let allowedTypes;
+        
+        if (inputName === 'photo' || inputName === 'signature') {
+            allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        } else {
+            allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg'];
+        }
+
+        if (!allowedTypes.includes(file.type)) {
+            return (inputName === 'photo' || inputName === 'signature')
+                ? 'Please upload only JPG, JPEG, or PNG files' 
+                : 'Please upload only PDF, JPG, or JPEG files';
+        }
+        if (file.size > maxSize) {
+            return 'File size must be less than 3MB';
+        }
+        return null;
+    }
+
+    fileInputs.forEach(input => {
+        input.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                const error = validateFile(this.files[0], this.name);
+                if (error) {
+                    showError(error);
+                    this.value = '';
+                } else {
+                    hideError();
+                }
+            }
+        });
+    });
+    
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        let hasError = false;
+        for (const input of fileInputs) {
+            if (input.files.length > 0) {
+                const error = validateFile(input.files[0], input.name);
+                if (error) {
+                    showError(error);
+                    hasError = true;
+                    break;
+                }
+            }
+        }
+
+        if (hasError) {
+            return;
+        }
+        
+        hideError();
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Uploading...';
+        
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin',
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Upload failed');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    window.location.href = "{{ url_for('citizen.dashboard') }}";
+                }
+            } else {
+                throw new Error(data.error || "Upload failed");
+            }
+        })
+        .catch(error => {
+            showError(error.message || "An error occurred during upload");
+            console.error('Error:', error);
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Upload';
+        });
+    });
+
+    function showError(message) {
+        errorDisplay.textContent = message;
+        errorDisplay.style.display = 'block';
+    }
+
+    function hideError() {
+        errorDisplay.style.display = 'none';
+        errorDisplay.textContent = '';
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,113 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Upload PAN Card Documents - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Upload PAN Card Documents</h1>
+        <a href="{{ url_for('citizen.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>PAN Card Document Upload Form</h3>
+                </div>
+                <div class="card-body">
+                    <div id="errorDisplay" class="alert alert-danger mb-3" style="display: none;"></div>
+                    
+                    <form id="uploadForm" method="POST" action="{{ url_for('citizen.upload_pancard') }}" enctype="multipart/form-data">
+                        {{ form.csrf_token }}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">ID Proof (Aadhaar/Voter ID/Driving License)</label>
+                            {{ form.id_proof(class="form-control", accept=".pdf,.jpg,.jpeg") }}
+                            {% for error in form.id_proof.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                            <small class="text-muted">Accepted formats: PDF, JPG, JPEG (Max size: 3MB)</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Recent Passport Size Photo</label>
+                            {{ form.photo(class="form-control", accept=".jpg,.jpeg,.png") }}
+                            {% for error in form.photo.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                            <small class="text-muted">Accepted formats: JPG, JPEG, PNG (Max size: 3MB)</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Address Proof</label>
+                            {{ form.address_proof(class="form-control", accept=".pdf,.jpg,.jpeg") }}
+                            {% for error in form.address_proof.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                            <small class="text-muted">Accepted formats: PDF, JPG, JPEG (Max size: 3MB)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Signature</label>
+                            {{ form.signature(class="form-control", accept=".jpg,.jpeg,.png") }}
+                            {% for error in form.signature.errors %}
+                                <p class="text-danger">{{ error }}</p>
+                            {% endfor %}
+                            <small class="text-muted">Accepted formats: JPG, JPEG, PNG (Max size: 3MB)</small>
+                        </div>
+                        
+                        {{ form.submit(class="btn btn-primary w-100", id="submitButton") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById('uploadForm');
+    const errorDisplay = document.getElementById('errorDisplay');
+    const submitButton = document.getElementById('submitButton');
+    
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Uploading...';
+        
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect on success
+                window.location.href = data.redirect;
+            } else {
+                // Display error
+                errorDisplay.textContent = data.error || 'An error occurred during upload.';
+                errorDisplay.style.display = 'block';
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Upload Documents';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            errorDisplay.textContent = 'Network error. Please try again.';
+            errorDisplay.style.display = 'block';
+            submitButton.disabled = false;
+            submitButton.innerHTML = 'Upload Documents';
+        });
+    });
+});
+</script>
+{% endblock %}

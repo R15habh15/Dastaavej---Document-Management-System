@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv/
+venv/
+ENV/
+
+# Flask
+instance/
+.webassets-cache
+
+# VS Code
+.vscode/
+
+# Windows
+desktop.ini
+Thumbs.db
+
+# Project specific
+dastaavej-drive-api.json
+uploads/
+*.db
+*.sqlite3
+test_upload.txt
+new_test_file.txt
+
+# Environment variables
+.env
+.flaskenv
+
+# PyCharm
+.idea/
+
+# Database
+*.sqlite
+
+# Logs
+*.log

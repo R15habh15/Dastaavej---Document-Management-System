@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Citizen Dashboard - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Welcome, {{ current_user.username }}</h1>
+    
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>My Applications</h3>
+                </div>
+                <div class="card-body">
+                    <p>Track your documents.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('citizen.view_applications') }}" class="btn btn-primary">View Applications</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>New Application</h3>
+                </div>
+                <div class="card-body">
+                    <p>Apply for Passport or PAN Card.</p>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-group">
+                        <a href="{{ url_for('citizen.passport_application') }}" class="btn btn-primary">Apply for Passport</a>
+                        <a href="{{ url_for('citizen.pancard_application') }}" class="btn btn-primary">Apply for PAN Card</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Notifications</h3>
+                </div>
+                <div class="card-body">
+                    {% set unread_count = current_user.notifications | selectattr('is_read', 'equalto', False) | list | length %}
+                    <p>You have <strong>{{ unread_count }}</strong> unread notifications.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('citizen.notifications') }}" class="btn btn-primary">View Notifications</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Applications</h3>
+                </div>
+                <div class="card-body">
+                    {% if applications %}
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Application Number</th>
+                                        <th>Document Type</th>
+                                        <th>Status</th>
+                                        <th>Submitted On</th>
+                                        <th>Last Updated</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for app in applications %}
+                                        <tr>
+                                            <td>{{ app.application_number }}</td>
+                                            <td>{{ app.document_type | title }}</td>
+                                            <td>
+                                                {% if app.status == 'pending' %}
+                                                    <span class="badge bg-warning">Pending</span>
+                                                {% elif app.status == 'under review' %}
+                                                    <span class="badge bg-info">Under Review</span>
+                                                {% elif app.status == 'approved' %}
+                                                    <span class="badge bg-success">Approved</span>
+                                                {% elif app.status == 'rejected' %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ app.status | title }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ app.created_at.strftime('%d %b %Y') }}</td>
+                                            <td>{{ app.updated_at.strftime('%d %b %Y') }}</td>
+                                            <td>
+                                                <a href="{{ url_for('citizen.application_status', application_id=app.id) }}" class="btn btn-sm btn-primary">View Details</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-center">You have no applications yet. <a href="{{ url_for('citizen.upload_documents') }}">Start a new application</a>.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

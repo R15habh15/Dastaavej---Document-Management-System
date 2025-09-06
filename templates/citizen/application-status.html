@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Application Status - Dastaavej{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Application Status</h1>
+        <a href="{{ url_for('citizen.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+    
+    {% if application %}
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3>Application Details</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Application details section -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Application Number:</strong> {{ application.application_number }}</p>
+                                <p><strong>Document Type:</strong> {{ application.document_type | title }}</p>
+                                <p><strong>Status:</strong> 
+                                    {% if application.status == 'pending' %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif application.status == 'under review' %}
+                                        <span class="badge bg-info">Under Review</span>
+                                    {% elif application.status == 'approved' %}
+                                        <span class="badge bg-success">Approved</span>
+                                    {% elif application.status == 'rejected' %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ application.status | title }}</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Submitted On:</strong> {{ application.created_at.strftime('%d %b %Y') }}</p>
+                                <p><strong>Last Updated:</strong> {{ application.updated_at.strftime('%d %b %Y') }}</p>
+                                
+                                <!-- Application Form Buttons -->
+                                <div class="mt-3">
+                                    <a href="{{ url_for('citizen.view_application_form', application_id=application.id) }}" class="btn btn-primary btn-sm" target="_blank">
+                                        <i class="fas fa-eye"></i> View Application Form
+                                    </a>
+                                    <a href="{{ url_for('citizen.download_application_form', application_id=application.id) }}" class="btn btn-success btn-sm">
+                                        <i class="fas fa-download"></i> Download Application Form
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Document Buttons Section - IMPROVED STYLING -->
+                        {% set documents = get_application_documents(application.id) %}
+                        {% if documents %}
+                        <div class="mt-4">
+                            <h4>Uploaded Documents</h4>
+                            <div class="row">
+                                {% for doc_type, doc in documents.items() %}
+                                <div class="col-md-3 mb-3">
+                                    <div class="card border">
+                                        <div class="card-body text-center p-2">
+                                            <h5 class="card-title mb-3">{{ doc.display_name }}</h5>
+                                            <div class="d-flex">
+                                                <a href="{{ url_for('citizen.view_document', application_id=application.id, doc_type=doc.document_type) }}" 
+                                                   class="btn btn-primary flex-grow-1 me-0 py-1" style="border-radius: 0; border-top-left-radius: 4px; border-bottom-left-radius: 4px; font-size: 0.9rem;">
+                                                    View
+                                                </a>
+                                                <a href="{{ url_for('citizen.download_document', application_id=application.id, doc_type=doc.document_type) }}" 
+                                                   class="btn btn-success flex-grow-1 ms-0 py-1" style="border-radius: 0; border-top-right-radius: 4px; border-bottom-right-radius: 4px; font-size: 0.9rem;">
+                                                    Download
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if status_updates %}
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Status History</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="timeline">
+                                {% for update in status_updates %}
+                                    <div class="timeline-item">
+                                        <div class="timeline-date">{{ update.updated_at.strftime('%Y-%m-%d %H:%M') }}</div>
+                                        <div class="timeline-content">
+                                            <h4>Status: {{ update.status | title }}</h4>
+                                            {% if update.comment %}
+                                                <p>{{ update.comment }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <p class="text-muted">No status updates available.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-warning">
+            <p>Application not found or you don't have permission to view it.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

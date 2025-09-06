@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Dastaavej - Document Tracking System{% endblock %}
+
+{% block content %}
+<!-- ✅ Improved Hero Section with Gradient Background -->
+<header class="py-5" style="background: linear-gradient(to right, #164040, #DDA853); color: white;">
+    <div class="container px-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col-lg-8 col-xl-7 col-xxl-6 text-center text-xl-start">
+                <h1 class="display-5 fw-bolder mb-2">Dastaavej: Document Tracking System</h1>
+                <p class="lead fw-normal text-white-50 mb-4">Track your Passport and PAN Card applications with ease. Get real-time updates on your document status.</p>
+                <!-- Fixed URL for registration -->
+                <a class="btn btn-primary btn-lg px-4 me-sm-3 mb-2" href="{{ url_for('auth.register') }}">Get Started</a>
+                <a class="btn btn-outline-light btn-lg px-4 mb-2" href="{{ url_for('main.about') }}">Learn More</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ✅ Features Section -->
+<section class="py-5" id="features">
+    <div class="container px-5 my-5">
+        <div class="row gx-5">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header"><h3>Track Documents</h3></div>
+                    <div class="card-body"><p>Keep track of your Passport and PAN Card applications in one place. Get real-time status updates.</p></div>
+                    <div class="card-footer"><a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Track</a></div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header"><h3>Apply Online</h3></div>
+                    <div class="card-body"><p>Apply for your Passport and PAN Card online. Upload required documents and get your cards faster.</p></div>
+                    <!-- Fixed URL for registration -->
+                    <div class="card-footer"><a href="{{ url_for('auth.register') }}" class="btn btn-primary">Register Now</a></div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header"><h3>Get Support</h3></div>
+                    <div class="card-body"><p>Need help with your application? Our support team is available 24/7 to assist you.</p></div>
+                    <div class="card-footer"><a href="{{ url_for('main.contact') }}" class="btn btn-primary">Contact Support</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
