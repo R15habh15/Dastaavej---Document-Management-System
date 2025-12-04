@@ -143,4 +143,5 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 ## Contributors
 
-Rishabh Tripathi
+-###Rishabh Tripathi
+-###Sumeet Prajapati
